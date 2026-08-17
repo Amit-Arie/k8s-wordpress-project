@@ -1,0 +1,32 @@
+replicaCount: 2
+
+imagePullSecrets:
+  - name: ecr-secret
+
+wordpress:
+  image:
+    repository: 992382545251.dkr.ecr.us-east-1.amazonaws.com/my-wordpress
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+
+mysql:
+  image:
+    repository: 992382545251.dkr.ecr.us-east-1.amazonaws.com/my-mysql
+    tag: "8.0"
+    pullPolicy: IfNotPresent
+  persistence:
+    storage: 2Gi
+  credentials:
+    dbName: wordpress
+    user: wordpress
+    password: wordpress
+    rootPassword: somewordpress
+
+ingress:
+  enabled: true
+  className: nginx
+  path: /
+  pathType: Prefix
